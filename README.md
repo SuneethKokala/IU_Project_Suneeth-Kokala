@@ -15,25 +15,25 @@ Safety is a major concern in industrial settings like factories, construction si
 7. Support proactive safety management through continuous monitoring and data-driven insights.
 
 # Tech Stack:
-# Programming Language:
+1. Programming Language:
 Python (for detection, backend, and data handling)
-# Computer Vision & AI Framework:
+2. Computer Vision & AI Framework:
 YOLOv8 (for PPE detection such as helmets, vests, and gloves)
-# Backend Framework:
+3. Backend Framework:
 FastAPI (for managing alerts, data communication, and APIs)
-# Database:
+4. Database:
 PostgreSQL (for storing violation records, compliance data, and user details)
-# Real-Time Messaging Protocol:
+5. Real-Time Messaging Protocol:
 MQTT (for sending instant alerts and updates)
-# Dashboard & Visualization:
+6. Dashboard & Visualization:
 Grafana (for visualizing compliance trends and safety statistics)
-# Containerization / Deployment:
+7. Containerization / Deployment:
 Docker (for packaging and deploying the entire system easily)
-# Version Control:
+8. Version Control:
 Git & GitHub (for project management and collaboration)
-# Development Tools:
+9. Development Tools:
 VS Code / Jupyter Notebook (for coding and testing the model)
-# Optional Libraries:
+10. Optional Libraries:
 OpenCV (for video frame processing)
 NumPy, Pandas (for data handling and analysis)
 
