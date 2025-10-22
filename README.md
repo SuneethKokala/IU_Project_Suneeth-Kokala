@@ -38,5 +38,5 @@ OpenCV (for video frame processing)
 NumPy, Pandas (for data handling and analysis)
 
 # Phase Status
-Conception Phase - Done
-Development Phase - Under Progress
+1. Conception Phase - Done
+2. Development Phase - Under Progress
