@@ -2,8 +2,13 @@
 
 # Industrial Safety Management System
 
-# Problem statement:
-Safety is a major concern in industrial settings like factories, construction sites, and train yards, where workers frequently fail to wear gloves, helmets, and vests, among other necessary protective gear. In particular, when it comes to big or many sites, manual supervision of safety compliance is ineffective, unreliable, and unable to deliver timely alerts. In order to guarantee that workers are wearing protective gear appropriately, this proposal suggests an automatic safety monitoring system that keeps an eye on them all the time. When a violation is found, the system logs the occurrence and tells supervisors right away. It also keeps a record for future use. In order to help management adopt preventative safety measures system also produces thorough reports and graphic summaries that highlight trends over time, common infractions, and overall compliance. Real-time worker monitoring system specifically designed for site conditions and an integrated workflow from detection to alerting and reporting are some of the project's main accomplishments. This system offers a comprehensive monitoring solution that helps safety officers manage compliance effectively, enhance worker protection, and lower the risk of accidents in industrial environments, in contrast to many other solutions that just concentrate on detecting protective gear. Its design is useful, scalable, and appropriate for use in expansive industrial environments.
+In industrial areas like factories, building sites and train yards where employees are regularly exposed to dangerous situations safety is still a top priority. Even though personal protective equipment (PPE) including gloves, vests and helmets are readily available, noncompliance with safety regulations continues. In vast industrial locations in particular manual PPE usage oversight is often unreliable, ineffective and unable to generate timely alerts. This lack of precise and continuous monitoring increases the risk of accidents, injuries and inefficiency at work.
+
+# Proposed Solution:
+To address these issues, this proposes an Automate Industrial Safety Monitoring System that continuously observes workers to ensure compliance with safety requirements. The technology checks to see if workers are wearing the appropriate safety equipment using an intelligent detection model. When a violation is found, it logs the occurrence, instantly notifies supervisors, and saves the information for further review.  Additionally, the system generate visual compliance reports and trend analyses to help management identify recurring issues and improve safety practices. Unlike traditional systems that only focus on gear detection this project integrates end to end functionality from detection to alerting and reporting providing a complete and practical safety management solution.
+
+# Project Outcome:
+The project is planned to produce an effective, scalable and reliable solution that increases worker safety by automating compliance monitoring.  It will encourage proactive safety management, lessen human error and eliminate the need for manual supervision.  In industrial settings the produced data and visual summaries will enhance worker accountability, facilitate data driven decision making  and reduce the risk of accidents. The system’s ultimate goal is to improve operational effectiveness and safety culture in all industrial sites.
 
 # Goal:
 1. Improve worker safety by ensuring proper use of personal protective equipment in industrial environments.
@@ -32,8 +37,8 @@ Docker (for packaging and deploying the entire system easily)
 8. Version Control:
 Git & GitHub (for project management and collaboration)
 9. Development Tools:
-VS Code / Jupyter Notebook (for coding and testing the model)
-10. Optional Libraries:
+VS Code (for coding and testing the model)
+10. Libraries:
 OpenCV (for video frame processing)
 NumPy, Pandas (for data handling and analysis)
 
