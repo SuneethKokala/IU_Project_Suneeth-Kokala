@@ -13,27 +13,20 @@ In industrial areas like factories, building sites and train yards where employe
 7. Support proactive safety management through continuous monitoring and data-driven insights.
 
 # Tech Stack:
-1. Programming Language:
-Python (for detection, backend, and data handling)
-2. Computer Vision & AI Framework:
-YOLOv8 (for PPE detection such as helmets, vests, and gloves)
-3. Backend Framework:
-FastAPI (for managing alerts, data communication, and APIs)
-4. Database:
-PostgreSQL (for storing violation records, compliance data, and user details)
-5. Real-Time Messaging Protocol:
-MQTT (for sending instant alerts and updates)
-6. Dashboard & Visualization:
-Grafana (for visualizing compliance trends and safety statistics)
-7. Containerization / Deployment:
-Docker (for packaging and deploying the entire system easily)
-8. Version Control:
-Git & GitHub (for project management and collaboration)
-9. Development Tools:
-VS Code (for coding and testing the model)
-10. Libraries:
-OpenCV (for video frame processing)
-NumPy, Pandas (for data handling and analysis)
+
+| **Category** | **Technology / Tool** | **Purpose / Description** |
+|---------------|------------------------|-----------------------------|
+| Programming Language | **Python** | Used for detection logic, backend, and data handling |
+| Computer Vision & AI Framework | **YOLOv8** | Detects PPE (helmets, vests, gloves) in real-time |
+| Backend Framework | **FastAPI** | Handles alerts, API communication, and data management |
+| Database | **PostgreSQL** | Stores violation records, compliance data, and user details |
+| Real-Time Messaging Protocol | **MQTT** | Sends instant alerts and real-time updates |
+| Dashboard & Visualization | **Grafana** | Visualizes safety statistics and compliance trends |
+| Containerization / Deployment | **Docker** | Packages and deploys the system efficiently |
+| Version Control | **Git & GitHub** | Enables version tracking and team collaboration |
+| Development Tools | **VS Code** | Used for coding, testing, and debugging |
+| Libraries | **OpenCV**, **NumPy**, **Pandas** | Video frame processing and data analysis |
+
 
 # Phase Status
 1. Conception Phase - Done
