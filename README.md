@@ -1,4 +1,4 @@
-# IU-Project-Suneeth-Kokala
+# IU_Project_Suneeth-Kokala
 
 # Automated Industrial Safety Management System
 In industrial areas like factories, building sites and train yards where employees are regularly exposed to dangerous situations safety is still a top priority. Even though personal protective equipment (PPE) including gloves, vests and helmets are readily available, noncompliance with safety regulations continues. In vast industrial locations in particular manual PPE usage oversight is often unreliable, ineffective and unable to generate timely alerts. This lack of precise and continuous monitoring increases the risk of accidents, injuries and inefficiency at work.
