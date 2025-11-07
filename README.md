@@ -37,6 +37,12 @@ In industrial areas like factories, building sites and train yards where employe
 - False positives or false negatives in motion or face detection.
 - Scalability issues when handling multiple devices or large data streams.
 
+**Operational Risks**
+- Complex maintenance and need for regular calibration of hardware components.
+- Power supply interruptions affecting continuous operation.
+- Environmental factors (poor lighting, obstructions, weather) impacting accuracy.
+- Human error during system setup or configuration.
+
 
 # Phase Status
 1. Conception Phase - Done
