@@ -28,6 +28,16 @@ In industrial areas like factories, building sites and train yards where employe
 | Libraries | **OpenCV**, **NumPy**, **Pandas** | Video frame processing and data analysis |
 
 
+# Project Risks:
+**Technical Risk**
+- Hardware malfunction (e.g., camera or sensor failure) may disrupt monitoring.
+- Software bugs or crashes in detection or communication modules.
+- Integration issues between Python, OpenCV, Twilio, and hardware components.
+- Network or internet connectivity failures can interrupt alert transmission.
+- False positives or false negatives in motion or face detection.
+- Scalability issues when handling multiple devices or large data streams.
+
+
 # Phase Status
 1. Conception Phase - Done
 2. Development Phase - Under Progress
