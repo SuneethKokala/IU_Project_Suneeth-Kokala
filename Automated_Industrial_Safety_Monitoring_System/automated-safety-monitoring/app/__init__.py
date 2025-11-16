@@ -1,1 +1,0 @@
-# Safety Monitoring Application
