@@ -10,5 +10,5 @@ def home():
     <p>Note: Camera functionality requires local deployment</p>
     '''
 
-if __name__ == '__main__':
-    app.run()
+# Export for Vercel
+handler = app
