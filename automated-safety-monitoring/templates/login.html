@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Safety Monitoring - Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #fff;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        #three-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        .login-container { 
+            max-width: 420px; 
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 123, 255, 0.2);
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0, 123, 255, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .logo { 
+            font-size: 4em; 
+            color: #007bff; 
+            margin-bottom: 20px;
+        }
+        h2 { 
+            color: #333; 
+            margin-bottom: 10px;
+            font-weight: 300;
+            font-size: 1.8em;
+        }
+        h3 { 
+            color: #666; 
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        input { 
+            width: 100%; 
+            padding: 15px 15px 15px 45px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background: linear-gradient(135deg, #007bff, #0056b3); 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        }
+        .error { 
+            color: #dc3545; 
+            text-align: center; 
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(220, 53, 69, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+        .credentials {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(0, 123, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 123, 255, 0.2);
+        }
+        .credentials p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+        .credentials strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h2>Safety Monitoring System</h2>
+        <h3><i class="fas fa-user-tie"></i> Supervisor Login</h3>
+        
+        <form method="POST" action="/login">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </form>
+        
+        {% if error %}
+            <div class="error">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+        {% endif %}
+        
+        <div class="credentials">
+            <p><strong>Default Credentials:</strong></p>
+            <p>Username: <strong>supervisor</strong></p>
+            <p>Password: <strong>admin123</strong></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Three.js raycaster sprite system for login
+        let renderer, scene, camera, group;
+        let selectedObject = null;
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+
+        function initThree() {
+            // Init renderer
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setAnimationLoop(animate);
+
+            // Init scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+
+            group = new THREE.Group();
+            scene.add(group);
+
+            // Init camera
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.set(20, 20, 20);
+            camera.lookAt(scene.position);
+
+            // Add main sprites
+            const sprite1 = new THREE.Sprite(new THREE.SpriteMaterial({ color: '#69f' }));
+            sprite1.position.set(8, 6, 6);
+            sprite1.scale.set(3, 6, 1);
+            group.add(sprite1);
+
+            const sprite2 = new THREE.Sprite(new THREE.SpriteMaterial({ color: '#69f', sizeAttenuation: false }));
+            sprite2.material.rotation = Math.PI / 4;
+            sprite2.position.set(10, -3, 3);
+            sprite2.center.set(0.5, 0);
+            sprite2.scale.set(0.15, 0.6, 0.1);
+            group.add(sprite2);
+
+            const group2 = new THREE.Object3D();
+            group2.scale.set(1.5, 2.5, 1);
+            group2.position.set(-6, 0, 0);
+            group2.rotation.set(Math.PI / 3, 0, 0);
+            group.add(group2);
+
+            const sprite3 = new THREE.Sprite(new THREE.SpriteMaterial({ color: '#69f' }));
+            sprite3.position.set(0, 3, 6);
+            sprite3.scale.set(12, 3, 4);
+            sprite3.center.set(-0.1, 0);
+            sprite3.material.rotation = Math.PI / 4;
+            group2.add(sprite3);
+
+            // Add decorative sprites around login area
+            for (let i = 0; i < 25; i++) {
+                const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ 
+                    color: new THREE.Color().setHSL(0.6 + Math.random() * 0.2, 0.7, 0.6),
+                    transparent: true,
+                    opacity: 0.4 + Math.random() * 0.3
+                }));
+                
+                // Position sprites around the edges to frame the login
+                const angle = (i / 25) * Math.PI * 2;
+                const radius = 25 + Math.random() * 15;
+                sprite.position.set(
+                    Math.cos(angle) * radius,
+                    (Math.random() - 0.5) * 40,
+                    Math.sin(angle) * radius
+                );
+                sprite.scale.set(
+                    Math.random() * 3 + 1, 
+                    Math.random() * 3 + 1, 
+                    1
+                );
+                group.add(sprite);
+            }
+
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('pointermove', onPointerMove);
+        }
+
+        function animate() {
+            // Slow rotation for subtle movement
+            group.rotation.y += 0.003;
+            group.rotation.x += 0.001;
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onPointerMove(event) {
+            if (selectedObject) {
+                selectedObject.material.color.set('#69f');
+                selectedObject = null;
+            }
+
+            pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+            pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(pointer, camera);
+            const intersects = raycaster.intersectObject(group, true);
+
+            if (intersects.length > 0) {
+                const res = intersects.filter(function (res) {
+                    return res && res.object;
+                })[0];
+
+                if (res && res.object) {
+                    selectedObject = res.object;
+                    selectedObject.material.color.set('#f00');
+                }
+            }
+        }
+
+        // Initialize Three.js
+        initThree();
+    </script>
+</body>
+</html>
