@@ -1,0 +1,15 @@
+ultralytics>=8.0.0
+opencv-python
+numpy
+pandas
+torch
+matplotlib
+flask
+flask-cors
+face_recognition
+dlib
+fastapi
+uvicorn
+python-multipart
+pillow
+openpyxl
