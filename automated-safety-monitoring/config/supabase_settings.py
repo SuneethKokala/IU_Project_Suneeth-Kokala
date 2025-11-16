@@ -1,17 +1,20 @@
-# Supabase Configuration
-# Replace these with your actual Supabase credentials
+import os
+from dotenv import load_dotenv
 
-# Get these from Supabase Dashboard > Settings > Database
-SUPABASE_URL = "https://your-project-ref.supabase.co"
-SUPABASE_ANON_KEY = "your-anon-key"
-SUPABASE_SERVICE_KEY = "your-service-role-key"
+# Load environment variables
+load_dotenv()
+
+# Supabase Configuration
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://your-project-ref.supabase.co")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY", "your-anon-key")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "your-service-role-key")
 
 # Database connection details
-DATABASE_HOST = "db.your-project-ref.supabase.co"
+DATABASE_HOST = os.getenv("DATABASE_HOST", "db.your-project-ref.supabase.co")
 DATABASE_PORT = 5432
 DATABASE_NAME = "postgres"
 DATABASE_USER = "postgres"
-DATABASE_PASSWORD = "your-database-password"
+DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "your-database-password")
 DATABASE_URL = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
 
 # Other settings (keep existing)
