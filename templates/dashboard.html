@@ -213,12 +213,14 @@
             </div>
         </div>
 
+
+
         <div class="alert-panel">
             <div class="panel-header">
                 <h2 class="panel-title"><i class="fas fa-clipboard-list"></i> Violation History</h2>
                 <div style="display: flex; gap: 10px;">
-                    <button onclick="openCamera()" class="export-btn" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #dc3545;" id="camera-btn">
-                        <i class="fas fa-video"></i> Open Realtime Camera
+                    <button onclick="startWebCamera()" class="export-btn" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #dc3545;" id="camera-btn">
+                        <i class="fas fa-video"></i> Start Detection
                     </button>
                     <button onclick="clearData()" class="export-btn" style="background: rgba(108, 117, 125, 0.1); border-color: rgba(108, 117, 125, 0.3); color: #6c757d;">
                         <i class="fas fa-trash"></i> Clear Data
@@ -226,11 +228,8 @@
                     <button onclick="refreshData()" class="export-btn" style="background: rgba(0, 123, 255, 0.1); border-color: rgba(0, 123, 255, 0.3); color: #007bff;">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
-                    <button onclick="syncToDatabase()" class="export-btn" style="background: rgba(138, 43, 226, 0.1); border-color: rgba(138, 43, 226, 0.3); color: #8a2be2;">
-                        <i class="fas fa-database"></i> Sync to DB
-                    </button>
-                    <button onclick="viewDatabase()" class="export-btn" style="background: rgba(75, 192, 192, 0.1); border-color: rgba(75, 192, 192, 0.3); color: #4bc0c0;">
-                        <i class="fas fa-eye"></i> View DB Data
+                    <button onclick="syncDatabase()" class="export-btn" style="background: rgba(0, 123, 255, 0.1); border-color: rgba(0, 123, 255, 0.3); color: #007bff;">
+                        <i class="fas fa-sync-alt"></i> Sync DB
                     </button>
                     <button onclick="exportExcel()" class="export-btn">
                         <i class="fas fa-file-excel"></i> Export Excel
@@ -480,12 +479,11 @@
 
         let cameraRunning = false;
         
-        function openCamera() {
-            const cameraBtn = event.target;
+        function startWebCamera() {
+            const cameraBtn = document.getElementById('camera-btn');
             
             if (!cameraRunning) {
-                // Start camera
-                cameraBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting...';
+                cameraBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting Detection...';
                 cameraBtn.disabled = true;
                 
                 fetch('/api/start_camera', {
@@ -496,159 +494,109 @@
                 .then(data => {
                     if (data.success) {
                         cameraBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Detection';
-                        cameraBtn.style.background = 'rgba(255, 193, 7, 0.1)';
-                        cameraBtn.style.borderColor = 'rgba(255, 193, 7, 0.3)';
-                        cameraBtn.style.color = '#ffc107';
-                        cameraBtn.disabled = false;
-                        cameraRunning = true;
-                    } else {
-                        throw new Error(data.error || 'Failed to start camera');
-                    }
-                })
-                .catch(error => {
-                    alert('Failed to start camera: ' + error.message);
-                    cameraBtn.innerHTML = '<i class="fas fa-video"></i> Open Realtime Camera';
-                    cameraBtn.disabled = false;
-                });
-            } else {
-                // Stop camera
-                cameraBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Stopping...';
-                cameraBtn.disabled = true;
-                
-                fetch('/api/stop_camera', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        cameraBtn.innerHTML = '<i class="fas fa-video"></i> Open Realtime Camera';
                         cameraBtn.style.background = 'rgba(220, 53, 69, 0.1)';
                         cameraBtn.style.borderColor = 'rgba(220, 53, 69, 0.3)';
                         cameraBtn.style.color = '#dc3545';
+                        cameraBtn.onclick = stopWebCamera;
                         cameraBtn.disabled = false;
-                        cameraRunning = false;
+                        cameraRunning = true;
+                        startDetectionDataRefresh();
                     } else {
-                        throw new Error(data.error || 'Failed to stop camera');
+                        throw new Error(data.error || 'Failed to start detection');
                     }
                 })
                 .catch(error => {
-                    alert('Failed to stop camera: ' + error.message);
+                    alert('Failed to start detection: ' + error.message);
+                    cameraBtn.innerHTML = '<i class="fas fa-video"></i> Start Detection';
                     cameraBtn.disabled = false;
                 });
             }
         }
-
-        function syncToDatabase() {
-            const syncBtn = event.target;
-            const icon = syncBtn.querySelector('i');
+        
+        function stopWebCamera() {
+            const cameraBtn = document.getElementById('camera-btn');
             
-            icon.classList.add('fa-spin');
-            syncBtn.disabled = true;
-            syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+            cameraBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Stopping...';
+            cameraBtn.disabled = true;
             
-            fetch('/api/sync_to_database', {
+            fetch('/api/stop_camera', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('✅ ' + data.message);
+                    cameraBtn.innerHTML = '<i class="fas fa-video"></i> Start Detection';
+                    cameraBtn.style.background = 'rgba(220, 53, 69, 0.1)';
+                    cameraBtn.style.borderColor = 'rgba(220, 53, 69, 0.3)';
+                    cameraBtn.style.color = '#dc3545';
+                    cameraBtn.onclick = startWebCamera;
+                    cameraBtn.disabled = false;
+                    cameraRunning = false;
+                    stopDetectionDataRefresh();
                 } else {
-                    alert('❌ Sync failed: ' + data.error);
+                    throw new Error(data.error || 'Failed to stop detection');
                 }
             })
             .catch(error => {
-                alert('❌ Sync error: ' + error.message);
-            })
-            .finally(() => {
-                syncBtn.innerHTML = '<i class="fas fa-database"></i> Sync to DB';
-                syncBtn.disabled = false;
+                alert('Failed to stop detection: ' + error.message);
+                cameraBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Detection';
+                cameraBtn.disabled = false;
             });
         }
+        
+        let detectionRefreshInterval = null;
+        
+        function startDetectionDataRefresh() {
+            // Refresh data every 2 seconds when detection is active
+            if (detectionRefreshInterval) {
+                clearInterval(detectionRefreshInterval);
+            }
+            detectionRefreshInterval = setInterval(loadViolations, 2000);
+        }
+        
+        function stopDetectionDataRefresh() {
+            if (detectionRefreshInterval) {
+                clearInterval(detectionRefreshInterval);
+                detectionRefreshInterval = null;
+            }
+        }
+        
+        function openCamera() {
+            // Legacy function - redirects to web camera
+            startWebCamera();
+        }
 
-        function viewDatabase() {
-            const viewBtn = event.target;
-            viewBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-            viewBtn.disabled = true;
+        function syncDatabase() {
+            const syncBtn = event.target;
             
-            fetch('/api/view_database')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Create modal to show database data
-                        const modal = document.createElement('div');
-                        modal.style.cssText = `
-                            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                            background: rgba(0,0,0,0.8); z-index: 1000; display: flex;
-                            align-items: center; justify-content: center;
-                        `;
-                        
-                        const content = document.createElement('div');
-                        content.style.cssText = `
-                            background: white; padding: 30px; border-radius: 15px;
-                            max-width: 90%; max-height: 80%; overflow: auto;
-                            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-                        `;
-                        
-                        let tableHTML = `
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                                <h2><i class="fas fa-database"></i> Database Records (${data.data.length})</h2>
-                                <button onclick="this.parentElement.parentElement.parentElement.remove()" 
-                                        style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">
-                                    <i class="fas fa-times"></i> Close
-                                </button>
-                            </div>
-                            <div style="overflow-x: auto;">
-                                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                                    <thead>
-                                        <tr style="background: #f8f9fa;">
-                                            <th style="border: 1px solid #ddd; padding: 8px;">ID</th>
-                                            <th style="border: 1px solid #ddd; padding: 8px;">Timestamp</th>
-                                            <th style="border: 1px solid #ddd; padding: 8px;">Employee</th>
-                                            <th style="border: 1px solid #ddd; padding: 8px;">Missing PPE</th>
-                                            <th style="border: 1px solid #ddd; padding: 8px;">Location</th>
-                                            <th style="border: 1px solid #ddd; padding: 8px;">Notified</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                        `;
-                        
-                        data.data.forEach(row => {
-                            const missingPpe = typeof row.missing_ppe === 'string' ? 
-                                JSON.parse(row.missing_ppe) : row.missing_ppe;
-                            tableHTML += `
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">${row.id}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">${new Date(row.timestamp).toLocaleString()}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">${row.employee_name} (${row.employee_id})</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px; color: #dc3545;">${missingPpe.join(', ')}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">${row.location}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">
-                                        <span style="color: ${row.notified ? '#28a745' : '#dc3545'};">
-                                            ${row.notified ? '✅ Yes' : '❌ No'}
-                                        </span>
-                                    </td>
-                                </tr>
-                            `;
-                        });
-                        
-                        tableHTML += '</tbody></table></div>';
-                        content.innerHTML = tableHTML;
-                        modal.appendChild(content);
-                        document.body.appendChild(modal);
-                    } else {
-                        alert('❌ Failed to load database data: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    alert('❌ Error loading database data: ' + error.message);
-                })
-                .finally(() => {
-                    viewBtn.innerHTML = '<i class="fas fa-eye"></i> View DB Data';
-                    viewBtn.disabled = false;
-                });
+            syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+            syncBtn.disabled = true;
+            
+            fetch('/api/sync_database', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(`Database sync completed! ${data.synced_count} violations synced.`);
+                } else {
+                    alert('Sync failed: ' + data.error);
+                }
+            })
+            .catch(error => {
+                alert('Database sync failed: ' + error.message);
+            })
+            .finally(() => {
+                syncBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Sync DB';
+                syncBtn.disabled = false;
+            });
         }
 
         function exportExcel() {

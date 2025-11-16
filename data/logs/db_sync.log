@@ -1,0 +1,2 @@
+SYNCED: {"timestamp": "2025-11-16T23:57:55.206787", "employee_id": "EMP003_Suneeth", "employee_name": "EMP003_Suneeth", "missing_ppe": ["helmet", "vest"], "location": "Main Camera", "notified": true, "notified_at": "2025-11-17T00:14:30.194068"}
+SYNCED: {"timestamp": "2025-11-17T00:15:32.604166", "employee_id": "EMP003_Suneeth", "employee_name": "EMP003_Suneeth", "missing_ppe": ["helmet", "vest"], "location": "Main Camera", "notified": false}

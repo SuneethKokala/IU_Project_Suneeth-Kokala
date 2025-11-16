@@ -15,7 +15,7 @@ DATABASE_PORT = 5432
 DATABASE_NAME = "postgres"
 DATABASE_USER = "postgres"
 DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "your-database-password")
-DATABASE_URL = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
+DATABASE_URL = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}?sslmode=require"
 
 # Other settings (keep existing)
 LOG_FILE = 'data/logs/ppe_violations.log'

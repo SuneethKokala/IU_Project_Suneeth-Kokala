@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-
-##  Installation
-
-'''bash
-# Clone and setup
-cd automated-safety-monitoring
-pip install -r requirements.txt
-
-# Add employee photos (format: EMP001_John_Doe.jpg)
-# Train face recognition
-python run.py train-faces
-'''
-
-## Usage
-
-### Dashboard
-'''bash
-python run.py dashboard
-'''
--**Access:** http://localhost:3001
-**Login:** supervisor / admin123
-
-### Camera Detection
-'''bash
-python run.py camera
-'''
-- **API:** http://localhost:8000/docs
-
-=======
 # IU_Project_Suneeth-Kokala
 
 # Automated Industrial Safety Management System
@@ -58,8 +28,6 @@ In industrial areas like factories, building sites and train yards where employe
 | Libraries | **OpenCV**, **NumPy**, **Pandas** | Video frame processing and data analysis |
 
 
-<<<<<<< HEAD
-=======
 # Project Risks:
 **Technical Risk**
 - Hardware malfunction (e.g., camera or sensor failure) may disrupt monitoring.
@@ -76,8 +44,6 @@ In industrial areas like factories, building sites and train yards where employe
 - Human error during system setup or configuration.
 
 
->>>>>>> f817fe7083e4aea0fd142d1acf06702d5b4ad3c9
 # Phase Status
 1. Conception Phase - Done
 2. Development Phase - Under Progress
->>>>>>> 00201ebc57f662460ac3b5db0eea06552f371f65

@@ -4,6 +4,7 @@ from flask_cors import CORS
 import json
 import os
 import sys
+import signal
 from datetime import datetime
 import threading
 import pandas as pd
@@ -168,6 +169,13 @@ def start_camera():
     global camera_process
     try:
         import subprocess
+        import signal
+        
+        # Kill any existing camera processes first
+        try:
+            subprocess.run(['pkill', '-f', 'run.py camera'], check=False)
+        except:
+            pass
         
         # Get the project directory
         project_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -176,15 +184,27 @@ def start_camera():
         camera_process = subprocess.Popen(
             ['python3', 'run.py', 'camera'],
             cwd=project_dir,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            preexec_fn=os.setsid  # Create new process group
         )
         
-        return jsonify({'success': True, 'message': 'Camera detection started'})
+        # Give it a moment to start
+        import time
+        time.sleep(1)
+        
+        # Check if process is still running
+        if camera_process.poll() is None:
+            return jsonify({'success': True, 'message': 'PPE detection started successfully'})
+        else:
+            # Process died immediately, get error
+            stdout, stderr = camera_process.communicate()
+            error_msg = stderr.decode() if stderr else 'Unknown error'
+            return jsonify({'error': f'Detection failed to start: {error_msg}'}), 500
         
     except Exception as e:
         print(f"Camera start error: {e}")
-        return jsonify({'error': f'Failed to start camera: {str(e)}'}), 500
+        return jsonify({'error': f'Failed to start detection: {str(e)}'}), 500
 
 @app.route('/api/stop_camera', methods=['POST'])
 def stop_camera():
@@ -196,19 +216,31 @@ def stop_camera():
         import signal
         import subprocess
         
-        # Kill all python processes running camera
-        subprocess.run(['pkill', '-f', 'run.py camera'], check=False)
+        # Kill all python processes running camera detection
+        try:
+            subprocess.run(['pkill', '-f', 'run.py camera'], check=False)
+        except:
+            pass
         
+        # Kill the specific process if we have it
         if camera_process and camera_process.poll() is None:
-            camera_process.kill()
-            camera_process.wait(timeout=3)
+            try:
+                # Kill the entire process group
+                os.killpg(os.getpgid(camera_process.pid), signal.SIGTERM)
+                camera_process.wait(timeout=3)
+            except:
+                # Force kill if graceful termination fails
+                try:
+                    os.killpg(os.getpgid(camera_process.pid), signal.SIGKILL)
+                except:
+                    pass
         
         camera_process = None
-        return jsonify({'success': True, 'message': 'Camera detection stopped'})
+        return jsonify({'success': True, 'message': 'PPE detection stopped successfully'})
         
     except Exception as e:
         print(f"Camera stop error: {e}")
-        return jsonify({'error': f'Failed to stop camera: {str(e)}'}), 500
+        return jsonify({'error': f'Failed to stop detection: {str(e)}'}), 500
 
 @app.route('/api/clear_data', methods=['POST'])
 def clear_data():
@@ -235,44 +267,50 @@ def clear_data():
         print(f"Clear data error: {e}")
         return jsonify({'error': f'Failed to clear data: {str(e)}'}), 500
 
-@app.route('/api/sync_to_database', methods=['POST'])
-def sync_to_database():
+@app.route('/api/sync_database', methods=['POST'])
+def sync_database():
     if 'logged_in' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
     
     try:
-        import sys
-        sys.path.append('..')
-        from app.database_service import DatabaseService
+        load_violations()
         
-        db_service = DatabaseService()
-        success, message = db_service.sync_log_to_database()
+        if not violation_history:
+            return jsonify({'success': True, 'synced_count': 0})
         
-        if success:
-            return jsonify({'success': True, 'message': message})
-        else:
-            return jsonify({'success': False, 'error': message}), 500
+        import requests
+        
+        headers = {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0eGZ0Y3ZwaWlnZHVzemhtdmR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzMyOTUxNywiZXhwIjoyMDc4OTA1NTE3fQ.AbHq4q-uY0mS08K40mABYAvn9eOGX6QYfQXDktXvN5s',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0eGZ0Y3ZwaWlnZHVzemhtdmR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzMyOTUxNywiZXhwIjoyMDc4OTA1NTE3fQ.AbHq4q-uY0mS08K40mABYAvn9eOGX6QYfQXDktXvN5s',
+            'Content-Type': 'application/json'
+        }
+        
+        synced_count = 0
+        
+        for violation in violation_history:
+            data = {
+                'timestamp': violation['timestamp'],
+                'employee_id': violation['employee_id'],
+                'employee_name': violation['employee_name'],
+                'missing_ppe': violation['missing_ppe'],
+                'location': violation.get('location', 'Main Camera'),
+                'notified': violation.get('notified', False)
+            }
             
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-@app.route('/api/view_database')
-def view_database():
-    if 'logged_in' not in session:
-        return jsonify({'error': 'Unauthorized'}), 401
-    
-    try:
-        import sys
-        sys.path.append('..')
-        from app.database_service import DatabaseService
+            response = requests.post(
+                'https://ttxftcvpiigduszhmvdu.supabase.co/rest/v1/ppe_violations',
+                headers=headers,
+                json=data
+            )
+            
+            if response.status_code == 201:
+                synced_count += 1
         
-        db_service = DatabaseService()
-        data = db_service.get_violations_from_db()
-        
-        return jsonify({'success': True, 'data': data})
+        return jsonify({'success': True, 'synced_count': synced_count})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/export_excel')
 def export_excel():

@@ -32,16 +32,17 @@ class Supervisor(Base):
     active = Column(Boolean, default=True)
 
 class Violation(Base):
-    __tablename__ = 'violations'
+    __tablename__ = 'ppe_violations'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
+    timestamp = Column(DateTime, nullable=False)
     employee_id = Column(String, nullable=False)
     employee_name = Column(String, nullable=False)
     missing_ppe = Column(Text, nullable=False)  # JSON string
     location = Column(String, default="Main Camera")
-    timestamp = Column(DateTime, default=datetime.utcnow)
     notified = Column(Boolean, default=False)
-    supervisor_notified = Column(String)  # supervisor username
+    notified_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class DatabaseManager:
     def __init__(self):
@@ -53,7 +54,7 @@ class DatabaseManager:
     def _connect(self):
         try:
             # Try to connect to PostgreSQL
-            db_url = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
+            db_url = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}?sslmode=require"
             self.engine = create_engine(db_url)
             self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
             
@@ -82,6 +83,7 @@ class DatabaseManager:
             session = self.get_session()
             try:
                 violation = Violation(
+                    timestamp=datetime.utcnow(),
                     employee_id=employee_id,
                     employee_name=employee_name,
                     missing_ppe=json.dumps(missing_ppe),
