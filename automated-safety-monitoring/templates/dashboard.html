@@ -213,12 +213,23 @@
             </div>
         </div>
 
+        <div class="camera-panel" id="camera-panel" style="display: none; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(0, 0, 0, 0.1); padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);">
+            <h2 style="margin-bottom: 20px;"><i class="fas fa-video"></i> Live Camera Feed</h2>
+            <video id="camera-video" width="640" height="480" autoplay style="border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);"></video>
+            <canvas id="camera-canvas" width="640" height="480" style="display: none;"></canvas>
+            <div style="margin-top: 15px;">
+                <button onclick="stopWebCamera()" class="export-btn" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #dc3545;">
+                    <i class="fas fa-stop"></i> Stop Camera
+                </button>
+            </div>
+        </div>
+
         <div class="alert-panel">
             <div class="panel-header">
                 <h2 class="panel-title"><i class="fas fa-clipboard-list"></i> Violation History</h2>
                 <div style="display: flex; gap: 10px;">
-                    <button onclick="openCamera()" class="export-btn" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #dc3545;" id="camera-btn">
-                        <i class="fas fa-video"></i> Open Realtime Camera
+                    <button onclick="startWebCamera()" class="export-btn" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #dc3545;" id="camera-btn">
+                        <i class="fas fa-video"></i> Start Web Camera
                     </button>
                     <button onclick="clearData()" class="export-btn" style="background: rgba(108, 117, 125, 0.1); border-color: rgba(108, 117, 125, 0.3); color: #6c757d;">
                         <i class="fas fa-trash"></i> Clear Data
@@ -473,64 +484,94 @@
         }
 
         let cameraRunning = false;
+        let videoStream = null;
         
-        function openCamera() {
-            const cameraBtn = event.target;
+        function startWebCamera() {
+            const cameraBtn = document.getElementById('camera-btn');
+            const cameraPanel = document.getElementById('camera-panel');
+            const video = document.getElementById('camera-video');
             
             if (!cameraRunning) {
-                // Start camera
                 cameraBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting...';
                 cameraBtn.disabled = true;
                 
-                fetch('/api/start_camera', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        cameraBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Detection';
-                        cameraBtn.style.background = 'rgba(255, 193, 7, 0.1)';
-                        cameraBtn.style.borderColor = 'rgba(255, 193, 7, 0.3)';
-                        cameraBtn.style.color = '#ffc107';
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        videoStream = stream;
+                        video.srcObject = stream;
+                        cameraPanel.style.display = 'block';
+                        
+                        cameraBtn.innerHTML = '<i class="fas fa-video"></i> Camera Active';
+                        cameraBtn.style.background = 'rgba(40, 167, 69, 0.1)';
+                        cameraBtn.style.borderColor = 'rgba(40, 167, 69, 0.3)';
+                        cameraBtn.style.color = '#28a745';
                         cameraBtn.disabled = false;
                         cameraRunning = true;
-                    } else {
-                        throw new Error(data.error || 'Failed to start camera');
-                    }
-                })
-                .catch(error => {
-                    alert('Failed to start camera: ' + error.message);
-                    cameraBtn.innerHTML = '<i class="fas fa-video"></i> Open Realtime Camera';
-                    cameraBtn.disabled = false;
-                });
-            } else {
-                // Stop camera
-                cameraBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Stopping...';
-                cameraBtn.disabled = true;
-                
-                fetch('/api/stop_camera', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        cameraBtn.innerHTML = '<i class="fas fa-video"></i> Open Realtime Camera';
-                        cameraBtn.style.background = 'rgba(220, 53, 69, 0.1)';
-                        cameraBtn.style.borderColor = 'rgba(220, 53, 69, 0.3)';
-                        cameraBtn.style.color = '#dc3545';
+                        
+                        // Start PPE detection simulation
+                        startPPEDetection();
+                    })
+                    .catch(err => {
+                        alert('Camera access denied or not available: ' + err.message);
+                        cameraBtn.innerHTML = '<i class="fas fa-video"></i> Start Web Camera';
                         cameraBtn.disabled = false;
-                        cameraRunning = false;
-                    } else {
-                        throw new Error(data.error || 'Failed to stop camera');
-                    }
-                })
-                .catch(error => {
-                    alert('Failed to stop camera: ' + error.message);
-                    cameraBtn.disabled = false;
-                });
+                    });
             }
+        }
+        
+        function stopWebCamera() {
+            const cameraBtn = document.getElementById('camera-btn');
+            const cameraPanel = document.getElementById('camera-panel');
+            const video = document.getElementById('camera-video');
+            
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+            
+            video.srcObject = null;
+            cameraPanel.style.display = 'none';
+            
+            cameraBtn.innerHTML = '<i class="fas fa-video"></i> Start Web Camera';
+            cameraBtn.style.background = 'rgba(220, 53, 69, 0.1)';
+            cameraBtn.style.borderColor = 'rgba(220, 53, 69, 0.3)';
+            cameraBtn.style.color = '#dc3545';
+            cameraBtn.disabled = false;
+            cameraRunning = false;
+        }
+        
+        function startPPEDetection() {
+            // Simulate PPE detection every 5 seconds
+            if (cameraRunning) {
+                setTimeout(() => {
+                    // Simulate random violation detection
+                    if (Math.random() > 0.7) {
+                        simulateViolation();
+                    }
+                    if (cameraRunning) startPPEDetection();
+                }, 5000);
+            }
+        }
+        
+        function simulateViolation() {
+            const violations = [
+                { name: 'John Doe', id: 'EMP001', missing: ['helmet'] },
+                { name: 'Jane Smith', id: 'EMP002', missing: ['vest'] },
+                { name: 'Mike Johnson', id: 'EMP003', missing: ['helmet', 'vest'] }
+            ];
+            
+            const violation = violations[Math.floor(Math.random() * violations.length)];
+            
+            // Add to violation history (simulate)
+            console.log('PPE Violation Detected:', violation);
+            
+            // Refresh data to show new violation
+            loadViolations();
+        }
+        
+        function openCamera() {
+            // Legacy function - redirects to web camera
+            startWebCamera();
         }
 
         function exportExcel() {
