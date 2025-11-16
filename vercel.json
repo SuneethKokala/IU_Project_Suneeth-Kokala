@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "automated-safety-monitoring/app/web/dashboard.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "automated-safety-monitoring/app/web/dashboard.py"
+      "dest": "/api/index.py"
     }
   ]
 }
