@@ -323,57 +323,130 @@ def export_excel():
         if not violation_history:
             return jsonify({'error': 'No violations to export'}), 400
         
+        print(f"Exporting {len(violation_history)} violations to Excel")
+        
         # Prepare data for Excel
         excel_data = []
-        for violation in violation_history:
-            # Parse timestamp
-            timestamp = datetime.fromisoformat(violation['timestamp'].replace('Z', '+00:00'))
-            
-            # Check notification status
-            notified = violation.get('notified', False)
-            notified_at = violation.get('notified_at', '')
-            
-            excel_data.append({
-                'Date': timestamp.strftime('%Y-%m-%d'),
-                'Time': timestamp.strftime('%H:%M:%S'),
-                'Employee ID': violation['employee_id'],
-                'Employee Name': violation['employee_name'],
-                'Missing PPE': ', '.join(violation['missing_ppe']),
-                'Location': violation.get('location', 'Main Camera'),
-                'Severity': 'High' if len(violation['missing_ppe']) > 1 else 'Medium',
-                'Employee Notified': 'Yes' if notified else 'No',
-                'Notified At': datetime.fromisoformat(notified_at.replace('Z', '+00:00')).strftime('%Y-%m-%d %H:%M:%S') if notified_at else ''
-            })
+        for i, violation in enumerate(violation_history):
+            try:
+                # Parse timestamp safely
+                timestamp_str = violation.get('timestamp', '')
+                if timestamp_str:
+                    # Handle different timestamp formats
+                    if 'T' in timestamp_str:
+                        # ISO format
+                        timestamp_str = timestamp_str.replace('Z', '+00:00')
+                        try:
+                            timestamp = datetime.fromisoformat(timestamp_str)
+                        except:
+                            # Fallback parsing
+                            timestamp = datetime.strptime(timestamp_str.split('+')[0], '%Y-%m-%dT%H:%M:%S')
+                    else:
+                        # Try parsing as simple format
+                        timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+                else:
+                    timestamp = datetime.now()
+                
+                # Get missing PPE safely
+                missing_ppe = violation.get('missing_ppe', [])
+                if isinstance(missing_ppe, str):
+                    try:
+                        missing_ppe = json.loads(missing_ppe)
+                    except:
+                        missing_ppe = [missing_ppe]
+                elif not isinstance(missing_ppe, list):
+                    missing_ppe = []
+                
+                # Check notification status
+                notified = violation.get('notified', False)
+                notified_at = violation.get('notified_at', '')
+                
+                # Parse notified_at safely
+                notified_at_str = ''
+                if notified_at:
+                    try:
+                        if 'T' in notified_at:
+                            notified_at = notified_at.replace('Z', '+00:00')
+                            notified_dt = datetime.fromisoformat(notified_at)
+                        else:
+                            notified_dt = datetime.strptime(notified_at, '%Y-%m-%d %H:%M:%S')
+                        notified_at_str = notified_dt.strftime('%Y-%m-%d %H:%M:%S')
+                    except:
+                        notified_at_str = str(notified_at)
+                
+                excel_data.append({
+                    'Date': timestamp.strftime('%Y-%m-%d'),
+                    'Time': timestamp.strftime('%H:%M:%S'),
+                    'Employee ID': violation.get('employee_id', 'Unknown'),
+                    'Employee Name': violation.get('employee_name', 'Unknown'),
+                    'Missing PPE': ', '.join(missing_ppe) if missing_ppe else 'None',
+                    'Location': violation.get('location', 'Main Camera'),
+                    'Severity': 'High' if len(missing_ppe) > 1 else 'Medium' if missing_ppe else 'Low',
+                    'Employee Notified': 'Yes' if notified else 'No',
+                    'Notified At': notified_at_str
+                })
+                
+            except Exception as row_error:
+                print(f"Error processing violation {i}: {row_error}")
+                # Add a basic row with error info
+                excel_data.append({
+                    'Date': datetime.now().strftime('%Y-%m-%d'),
+                    'Time': datetime.now().strftime('%H:%M:%S'),
+                    'Employee ID': 'ERROR',
+                    'Employee Name': f'Error processing row {i}',
+                    'Missing PPE': str(row_error),
+                    'Location': 'Error',
+                    'Severity': 'Error',
+                    'Employee Notified': 'No',
+                    'Notified At': ''
+                })
+        
+        if not excel_data:
+            return jsonify({'error': 'No valid data to export'}), 400
+        
+        print(f"Prepared {len(excel_data)} rows for Excel export")
         
         # Create DataFrame
         df = pd.DataFrame(excel_data)
         
         # Create Excel file in memory
         output = BytesIO()
-        with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            df.to_excel(writer, sheet_name='PPE Violations', index=False)
-            
-            # Get workbook and worksheet
-            workbook = writer.book
-            worksheet = writer.sheets['PPE Violations']
-            
-            # Auto-adjust column widths
-            for column in worksheet.columns:
-                max_length = 0
-                column_letter = column[0].column_letter
-                for cell in column:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(str(cell.value))
-                    except:
-                        pass
-                adjusted_width = min(max_length + 2, 50)
-                worksheet.column_dimensions[column_letter].width = adjusted_width
+        
+        try:
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                df.to_excel(writer, sheet_name='PPE Violations', index=False)
+                
+                # Get workbook and worksheet for formatting
+                try:
+                    workbook = writer.book
+                    worksheet = writer.sheets['PPE Violations']
+                    
+                    # Auto-adjust column widths
+                    for column in worksheet.columns:
+                        max_length = 0
+                        column_letter = column[0].column_letter
+                        for cell in column:
+                            try:
+                                if cell.value and len(str(cell.value)) > max_length:
+                                    max_length = len(str(cell.value))
+                            except:
+                                pass
+                        adjusted_width = min(max(max_length + 2, 10), 50)
+                        worksheet.column_dimensions[column_letter].width = adjusted_width
+                except Exception as format_error:
+                    print(f"Warning: Could not format Excel file: {format_error}")
+                    # Continue without formatting
+        
+        except Exception as excel_error:
+            print(f"Excel creation error: {excel_error}")
+            return jsonify({'error': f'Failed to create Excel file: {str(excel_error)}'}), 500
         
         output.seek(0)
         
         # Generate filename with current date
         filename = f"PPE_Violations_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+        
+        print(f"Sending Excel file: {filename}")
         
         return send_file(
             output,
@@ -384,7 +457,9 @@ def export_excel():
         
     except Exception as e:
         print(f"Excel export error: {e}")
-        return jsonify({'error': 'Failed to generate Excel file'}), 500
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'Export failed: {str(e)}'}), 500
 
 if __name__ == '__main__':
     # Create necessary directories

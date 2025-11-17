@@ -1,0 +1,599 @@
+[
+  {
+    "timestamp": "2025-11-16T08:44:32.714258",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "goggles",
+      "helmet"
+    ],
+    "location": "Workshop",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-14T07:27:32.714357",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "vest",
+      "helmet"
+    ],
+    "location": "Entrance",
+    "notified": true,
+    "notified_at": "2025-11-14T07:36:32.714357"
+  },
+  {
+    "timestamp": "2025-11-14T06:08:32.714350",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "vest"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-13T09:43:32.714370",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "helmet",
+      "boots"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-11-13T10:07:32.714370"
+  },
+  {
+    "timestamp": "2025-11-11T18:25:32.714160",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "boots"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-11-11T18:32:32.714160"
+  },
+  {
+    "timestamp": "2025-11-11T17:45:32.714337",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "vest"
+    ],
+    "location": "Entrance",
+    "notified": true,
+    "notified_at": "2025-11-11T18:26:32.714337"
+  },
+  {
+    "timestamp": "2025-11-11T14:46:32.714284",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "goggles"
+    ],
+    "location": "Workshop",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-10T05:34:32.714195",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "goggles",
+      "vest",
+      "helmet"
+    ],
+    "location": "Main Camera",
+    "notified": true,
+    "notified_at": "2025-11-10T06:28:32.714195"
+  },
+  {
+    "timestamp": "2025-11-09T22:09:32.714408",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "boots",
+      "helmet"
+    ],
+    "location": "Entrance",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-09T20:48:32.714329",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "vest",
+      "gloves"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-09T16:45:32.714275",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "boots",
+      "helmet",
+      "gloves"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-08T15:33:32.714365",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "boots",
+      "vest",
+      "gloves"
+    ],
+    "location": "Loading Dock",
+    "notified": true,
+    "notified_at": "2025-11-08T15:48:32.714365"
+  },
+  {
+    "timestamp": "2025-11-08T12:59:32.714378",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "vest",
+      "boots"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-07T23:32:32.714394",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "gloves"
+    ],
+    "location": "Main Camera",
+    "notified": true,
+    "notified_at": "2025-11-07T23:48:32.714394"
+  },
+  {
+    "timestamp": "2025-11-07T23:00:32.714405",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "gloves",
+      "vest"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-06T19:47:32.714254",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "vest"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-06T03:07:32.714308",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "boots",
+      "gloves",
+      "vest"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-05T06:14:32.714375",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "boots",
+      "helmet"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-04T16:18:32.714419",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "goggles"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-11-04T17:08:32.714419"
+  },
+  {
+    "timestamp": "2025-11-04T14:09:32.714219",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "gloves"
+    ],
+    "location": "Loading Dock",
+    "notified": true,
+    "notified_at": "2025-11-04T15:06:32.714219"
+  },
+  {
+    "timestamp": "2025-11-02T14:59:32.714386",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "vest"
+    ],
+    "location": "Entrance",
+    "notified": true,
+    "notified_at": "2025-11-02T15:53:32.714386"
+  },
+  {
+    "timestamp": "2025-11-02T13:40:32.714229",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "vest"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-11-02T13:53:32.714229"
+  },
+  {
+    "timestamp": "2025-11-02T05:20:32.714250",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "helmet",
+      "goggles"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-11-01T23:35:32.714341",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "boots",
+      "goggles",
+      "helmet"
+    ],
+    "location": "Main Camera",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-29T23:49:32.714321",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "helmet",
+      "vest",
+      "boots"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-29T08:05:32.714345",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "goggles",
+      "vest"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-10-29T08:10:32.714345"
+  },
+  {
+    "timestamp": "2025-10-28T08:39:32.714292",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "boots",
+      "gloves",
+      "vest"
+    ],
+    "location": "Main Camera",
+    "notified": true,
+    "notified_at": "2025-10-28T09:12:32.714292"
+  },
+  {
+    "timestamp": "2025-10-28T00:27:32.714237",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "vest",
+      "boots"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-10-28T01:21:32.714237"
+  },
+  {
+    "timestamp": "2025-10-27T23:48:32.714362",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "gloves",
+      "helmet"
+    ],
+    "location": "Workshop",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-27T01:48:32.714269",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "vest",
+      "boots",
+      "goggles"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-26T01:06:32.714317",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "gloves"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-25T23:46:32.714264",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "helmet",
+      "goggles",
+      "vest"
+    ],
+    "location": "Entrance",
+    "notified": true,
+    "notified_at": "2025-10-26T00:00:32.714264"
+  },
+  {
+    "timestamp": "2025-10-25T11:27:32.714332",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "boots"
+    ],
+    "location": "Loading Dock",
+    "notified": true,
+    "notified_at": "2025-10-25T11:40:32.714332"
+  },
+  {
+    "timestamp": "2025-10-25T07:07:32.714312",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "helmet",
+      "gloves",
+      "boots"
+    ],
+    "location": "Workshop",
+    "notified": true,
+    "notified_at": "2025-10-25T07:54:32.714312"
+  },
+  {
+    "timestamp": "2025-10-25T04:23:32.714205",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "gloves",
+      "goggles",
+      "helmet"
+    ],
+    "location": "Workshop",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-24T21:18:32.714279",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "vest"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-10-24T21:43:32.714279"
+  },
+  {
+    "timestamp": "2025-10-24T11:00:32.714415",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "boots",
+      "helmet"
+    ],
+    "location": "Loading Dock",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-24T08:23:32.714305",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "boots"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-22T18:51:32.714297",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "helmet",
+      "gloves"
+    ],
+    "location": "Main Camera",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-21T06:46:32.714390",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "gloves",
+      "vest"
+    ],
+    "location": "Workshop",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-21T05:25:32.714244",
+    "employee_id": "EMP003",
+    "employee_name": "Suneeth Kokala",
+    "missing_ppe": [
+      "vest",
+      "goggles",
+      "gloves"
+    ],
+    "location": "Workshop",
+    "notified": true,
+    "notified_at": "2025-10-21T05:49:32.714244"
+  },
+  {
+    "timestamp": "2025-10-20T15:54:32.714324",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "gloves",
+      "goggles"
+    ],
+    "location": "Loading Dock",
+    "notified": true,
+    "notified_at": "2025-10-20T16:22:32.714324"
+  },
+  {
+    "timestamp": "2025-10-20T14:38:32.714214",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "gloves"
+    ],
+    "location": "Workshop",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-20T09:29:32.714300",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "boots",
+      "gloves"
+    ],
+    "location": "Assembly Line",
+    "notified": true,
+    "notified_at": "2025-10-20T09:40:32.714300"
+  },
+  {
+    "timestamp": "2025-10-20T06:45:32.714353",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "boots",
+      "vest",
+      "gloves"
+    ],
+    "location": "Main Camera",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-20T00:31:32.714288",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "boots",
+      "vest"
+    ],
+    "location": "Entrance",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-19T23:32:32.714225",
+    "employee_id": "EMP002",
+    "employee_name": "Raksha Patel",
+    "missing_ppe": [
+      "vest"
+    ],
+    "location": "Workshop",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-19T07:18:32.714412",
+    "employee_id": "EMP004",
+    "employee_name": "John Smith",
+    "missing_ppe": [
+      "goggles"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-17T07:55:32.714382",
+    "employee_id": "EMP001",
+    "employee_name": "Navjot Singh",
+    "missing_ppe": [
+      "helmet",
+      "goggles",
+      "gloves"
+    ],
+    "location": "Main Camera",
+    "notified": false,
+    "notified_at": ""
+  },
+  {
+    "timestamp": "2025-10-17T07:35:32.714400",
+    "employee_id": "EMP005",
+    "employee_name": "Sarah Johnson",
+    "missing_ppe": [
+      "boots",
+      "vest"
+    ],
+    "location": "Assembly Line",
+    "notified": false,
+    "notified_at": ""
+  }
+]
